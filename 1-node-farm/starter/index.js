@@ -1,5 +1,7 @@
 const fs = require('fs');
 const { start } = require('repl');
+const http = require('http');
+
 
 //Blocking syncronous way
 /*
@@ -22,6 +24,7 @@ console.log("Will Read File");
 
 //Call Back way of reading file 
 
+/*
 fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
     fs.readFile(`./txt/${data1}.txt`,'utf-8',(err,data2)=>{
         console.log(data2);
@@ -37,3 +40,17 @@ fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
         })
     })
 })
+*/
+
+
+////////////Server////////////
+
+const server = http.createServer((request,response)=>{
+    console.log(request);
+    response.end("Hello From The Server");
+});
+
+server.listen(8000,'127.0.0.1',()=>{
+    console.log("Server is Listening to Request on Port 8000");
+});
+
