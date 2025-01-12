@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { start } = require('repl');
 const http = require('http');
+const url = require( 'url');
 
 
 //Blocking syncronous way
@@ -46,8 +47,19 @@ fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
 ////////////Server////////////
 
 const server = http.createServer((request,response)=>{
-    console.log(request);
-    response.end("Hello From The Server");
+
+    const path = request.url;
+
+    if(path ==='/overview' || path === '/'){
+        response.end('This is Overview');
+    }else if(path === '/product'){
+        response.end("This is the Product");
+    }else{
+        response.writeHead(404,{
+            'content-type' : 'text/html',
+        });
+        response.end("<h1>404 Page not found :(</h1>");
+    }
 });
 
 server.listen(8000,'127.0.0.1',()=>{
