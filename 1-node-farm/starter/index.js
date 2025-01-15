@@ -1,8 +1,7 @@
-const fs = require('fs');
-const { start } = require('repl');
-const http = require('http');
-const url = require( 'url');
-
+const fs = require("fs");
+const { start } = require("repl");
+const http = require("http");
+const url = require("url");
 
 //Blocking syncronous way
 /*
@@ -14,7 +13,7 @@ fs.writeFileSync('./txt/output.txt',textOut)
 console.log("file written");
 */
 
-//Non blocking async way 
+//Non blocking async way
 
 /*
 fs.readFile('./txt/start.txt','utf-8',(err,data)=>{
@@ -23,7 +22,7 @@ fs.readFile('./txt/start.txt','utf-8',(err,data)=>{
 console.log("Will Read File");
 */
 
-//Call Back way of reading file 
+//Call Back way of reading file
 
 /*
 fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
@@ -43,26 +42,33 @@ fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
 })
 */
 
-
 ////////////Server////////////
 
-const server = http.createServer((request,response)=>{
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8")
+const dataObj = JSON.parse(data);
 
-    const path = request.url;
 
-    if(path ==='/overview' || path === '/'){
-        response.end('This is Overview');
-    }else if(path === '/product'){
-        response.end("This is the Product");
-    }else{
-        response.writeHead(404,{
-            'content-type' : 'text/html',
-        });
-        response.end("<h1>404 Page not found :(</h1>");
-    }
+const server = http.createServer((request, response) => {
+  const path = request.url;
+
+  if (path === "/overview" || path === "/") {
+    response.end("This is Overview");
+  } else if (path === "/product") {
+    response.end("This is the Product");
+  } else if (path === "/api") {
+
+      response.writeHead(200, {
+        "content-type": "application/json",
+      });
+      response.end(data);
+  } else {
+    response.writeHead(404, {
+      "content-type": "text/html",
+    });
+    response.end("<h1>404 Page not found :(</h1>");
+  }
 });
 
-server.listen(8000,'127.0.0.1',()=>{
-    console.log("Server is Listening to Request on Port 8000");
+server.listen(8000, "127.0.0.1", () => {
+  console.log("Server is Listening to Request on Port 8000");
 });
-
